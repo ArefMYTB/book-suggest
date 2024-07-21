@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Navbar</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            width: 100%;
+            background-color: #333;
+            color: white;
+            padding: 1em 0;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 2px -2px gray;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 1em;
+        }
+        .navbar .user-info {
+            display: flex;
+            align-items: center;
+        }
+        .navbar .search-info {
+            display: flex;
+            align-items: center;
+        }
+        .navbar .search-form {
+            display: flex;
+            align-items: center;
+        }
+        .navbar input[type="text"] {
+            padding: 0.5em;
+            border-radius: 4px;
+            border: none;
+        }
+        .navbar input[type="submit"] {
+            padding: 0.5em;
+            border-radius: 4px;
+            border: none;
+            margin-left: 0.5em;
+            background-color: #555;
+            color: white;
+            cursor: pointer;
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .dropdown:hover .dropbtn {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="user-info">
+        {% if request.user.is_authenticated %}
+            {% if request.META.HTTP_REFERER == 'http://127.0.0.1:8000/login' %}
+                <p>Hello {{request.user}}</p>
+            {% endif %}
+            <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+        {% endif %}
+
+    </div>
+    <div class="search-info">
+        {% if page == 'suggest' %}
+            <div class="dropdown">
+                <a href="javascript:void(0)" class="dropbtn">Suggest</a>
+                <div class="dropdown-content">
+                    <a href="{% url 'suggest' %}?type=author">Author</a>
+                    <a href="{% url 'suggest' %}?type=genre">Genre</a>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="search-form">
+            <form method="GET" action="{% url 'show' %}">
+                <input type="text" name="q" placeholder="Search Rooms ...">
+                <input type="submit" value="Search">
+            </form>
+        </div>
+    </div>
+
+</nav>
+
+</body>
+</html>

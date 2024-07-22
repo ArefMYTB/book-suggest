@@ -1,16 +1,13 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework import generics
-from .models import Book, Rating
+from .models import Book, Rating, User
 from .serializers import BookSerializers
 from rest_framework.views import APIView
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
-from django.utils import timezone
-from datetime import timedelta
 from django.http import JsonResponse
 from collections import defaultdict
 
@@ -182,8 +179,10 @@ def suggestWithAuthor(ratings):
     books = []
     fav_authors = {rating.book.author for rating in ratings if rating.rating > 3}
 
+    print(fav_authors)
+
     for author in fav_authors:
-        books.append(Book.objects.filter(author__icontains=author))
+        books.append(Book.objects.filter(author=author))
 
     return books
 
@@ -197,10 +196,11 @@ def suggestWithGenre(ratings):
         if rating.rating > 3:
             genre_counts[rating.book.genre] += 1
 
-    # Find the genre with the maximum count
-    fav_genre = max(genre_counts, key=genre_counts.get)
+    # Find the genre with the maximum count of high score
+    if genre_counts:
+        fav_genre = max(genre_counts, key=genre_counts.get)
 
-    books.append(Book.objects.filter(genre__icontains=fav_genre))
+        books.append(Book.objects.filter(genre=fav_genre))
 
     return books
 

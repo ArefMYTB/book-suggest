@@ -79,8 +79,14 @@ WSGI_APPLICATION = "BookStore.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        # "ENGINE": "django.db.backends.sqlite3",
+        # "NAME": BASE_DIR / "db.sqlite3",
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'test',
+        'USER': 'postgres',
+        'PASSWORD': 'aReFtb#$3463',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -102,7 +108,6 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
